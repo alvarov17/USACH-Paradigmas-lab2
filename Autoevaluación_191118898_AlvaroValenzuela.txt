@@ -1,0 +1,31 @@
+Requerimientos
+
+Escala:
+  0     -> No Realizado
+  0.25  -> 25%
+  0.5   -> 50%
+  0.75  -> 75%
+  1     -> Completado
+
+
+TDAs
+
+Requerimiento   | Puntaje
+-----------------------
+image                 | 1         
+imageIsBitmap         | 1
+imageIsPixmap         | 1
+imageIsHexmap         | 1
+imageIsCompressed     | 0
+imageFlipH            | 1
+imageFlipV            | 1
+imageCrop             | 1
+imageRGBToHex         | 0
+imageToHistogram      | 0
+imageRotate90         | 0
+imageCompress         | 0
+imageChangePixel      | 0
+imageInvertColorRGB   | 0
+imageToString         | 0
+imageDepthLayers      | 0
+imageDecompress       | 0
