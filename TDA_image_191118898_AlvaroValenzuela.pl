@@ -1,3 +1,26 @@
+dec_hex(1, "1").
+dec_hex(2, "2").
+dec_hex(3, "3").
+dec_hex(4, "4").
+dec_hex(5, "5").
+dec_hex(6, "6").
+dec_hex(7, "7").
+dec_hex(8, "8").
+dec_hex(9, "9").
+dec_hex(10, "A").
+dec_hex(11, "B").
+dec_hex(12, "C").
+dec_hex(13, "D").
+dec_hex(14, "E").
+dec_hex(15, "F").
+dec_hex(D, H) :-
+    X is D mod 16,
+    Y is D//16,
+    dec_hex(Y, FirstHex), 
+    dec_hex(X, LastHex),
+    atom_concat(FirstHex, LastHex, H).
+
+
 /* TDA PIXBIT
 
 Dominio:
@@ -52,6 +75,7 @@ imageIsHexmap(I) :-
   image(_, _, Pixels, I),
   pixelsArePixrgb(Pixels). 
 
+
 pixelFlipH(Width, PixelIn, PixelOut) :-
   pixbit(X, Y, Bit, Depth, PixelIn),
   ( Y is Width - 1 -> NewY is Y - 1 ; NewY is Y + 1),
@@ -100,6 +124,26 @@ cropPixels([PixelIn | PixelsIn], X1, Y1, X2, Y2, [PixelOut | PixelsOut]) :-
 imageCrop(ImageIn, X1, Y1, X2, Y2, ImageOut) :-
     image(Width, Height, PixelsIn, ImageIn),
     cropPixels(PixelsIn, X1, Y1, X2, Y2, PixelsOut),
+    image(Width, Height, PixelsOut, ImageOut).
+
+pixelToHex(PixelIn, PixelOut) :-
+    pixrgb(Width, Height, Red, Green, Blue, Depth, PixelIn),
+    dec_hex(Red, RedHex),
+    dec_hex(Green, GreenHex),
+    dec_hex(Blue, BlueHex),
+    string_concat(RedHex, GreenHex, RedGreenHexPixel),
+    string_concat(RedGreenHexPixel, BlueHex, PixelHexOut),
+    pixhex(Width, Height, PixelHexOut, Depth, PixelOut).
+    
+
+pixelsToHex([], []).
+pixelsToHex([PixelIn | PixelsIn], [PixelOut | PixelsOut]) :-
+    pixelToHex(PixelIn, PixelOut),
+    pixelsToHex(PixelsIn, PixelsOut).
+
+imageRGBToHex(ImageIn, ImageOut) :-
+    image(Width, Height, PixelsIn, ImageIn),
+    pixelsToHex(PixelsIn, PixelsOut),
     image(Width, Height, PixelsOut, ImageOut).
     
 
