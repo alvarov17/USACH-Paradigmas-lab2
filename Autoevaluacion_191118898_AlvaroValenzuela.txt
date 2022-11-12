@@ -20,7 +20,7 @@ imageIsCompressed     | 0
 imageFlipH            | 1
 imageFlipV            | 1
 imageCrop             | 1
-imageRGBToHex         | 0
+imageRGBToHex         | 1
 imageToHistogram      | 0
 imageRotate90         | 0
 imageCompress         | 0
