@@ -106,7 +106,7 @@ getBlue([_, _, _, _, Blue, _], Blue).
 % Dominio:
 % 	X: Int
 %	T: Int
-% 	Hex: Int {0, 1, ... 255}
+% 	Hex: String
 %  	Depth: Int{0, 1 ... 255}
 %  	pixbit: List
 pixhex(X, Y, Hex, Depth, [X, Y, Hex, Depth]) :- string(Hex).
@@ -114,7 +114,7 @@ pixhex(X, Y, Hex, Depth, [X, Y, Hex, Depth]) :- string(Hex).
 % --------------------------------------- Selectores --------------------------------------------
 % Dominio:
 % 	pixbit: TDA Pixhex
-getHex([_, _, Hex, _], Hex). 
+getHex([_, _, Hex, _], Hex).
 
 %  --------------------------------------- TDA IMAGE --------------------------------------------
 % Dominio:
@@ -167,7 +167,7 @@ pixelsArePixbits([Head | Tail]) :-
 %  pixbits: List X TDA Pixhex
 pixelsArePixhexs([]).
 pixelsArePixhexs([Head | Tail]) :-
-  pixhex(_, _, Hex, _, Head),
+  getHex(Head, Hex),
   string(Hex),
   pixelsArePixhexs(Tail).
 
@@ -189,13 +189,13 @@ imageIsBitmap(I) :-
 %  Image: TDA image
 imageIsPixmap(I) :-
   image(_, _, Pixels, I),
-  pixelsArePixhexs(Pixels). 
+  pixelsArePixrgb(Pixels). 
 
 % Dominio:
 %  Image: TDA image
 imageIsHexmap(I) :-
   image(_, _, Pixels, I),
-  pixelsArePixrgb(Pixels). 
+  pixelsArePixhexs(Pixels). 
 
 % Dominio:
 %  	width: Int
@@ -329,5 +329,4 @@ pixelsToHistogram([PixelIn | PixelsIn], [PixelOut | PixelsOut]) :-
 imageToHistogram(I1, Histogram) :-
   image(Width, Height, PixelsIn, I1),
   pixelsToHistogram(PixelsIn, Histogram).
-
 
