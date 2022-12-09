@@ -142,6 +142,8 @@ getHex([_, _, Hex, _], Hex).
 % imageRGBToHex
 % pixelsToHistogram
 % imageToHistogram
+% imageChangePixel
+% imageInvertColorRGB
 % 
 %  --------------------------------------- Representación ------------------------------------------
 % Lista que contendrá X, Y, Bit y Depth (X x Y x Bit x Depth).
@@ -330,3 +332,64 @@ imageToHistogram(I1, Histogram) :-
   image(Width, Height, PixelsIn, I1),
   pixelsToHistogram(PixelsIn, Histogram).
 
+% Dominio:
+%	PixelIn: pixbit
+% Pmodificado : {pixbit, pixrgb, pixhex}
+%	PixelOut: pixbit
+changeBitPixel(PixelIn, Pmodificado, PixelOut) :-
+    pixbit(X, Y, Bit, Depth, PixelIn),
+    pixbit(X1, Y1, Bit1, Depth1, Pmodificado),
+    (   X is X1,
+        Y is Y1 ->  pixbit(X1, Y1, Bit1, Depth1, PixelOut) ; pixbit(X, Y, Bit, Depth, PixelOut)).
+
+% Dominio:
+%	PixelIn: pixrgb
+% Pmodificado : {pixbit, pixrgb, pixhex}
+%	PixelOut: pixrgb
+changeRGBDPixel(PixelIn, Pmodificado, PixelOut) :-
+    pixrgb(X, Y, R, G, B, Depth, PixelIn),
+    pixrgb(X1, Y1, R1, G1, B1, Depth1, Pmodificado),
+    (   X is X1,
+        Y is Y1 ->  pixrgb(X1, Y1, R1, G1,B1, Depth1, PixelOut) ; pixrgb(X, Y, R, G, B, Depth, PixelOut)).
+
+% Dominio:
+%	PixelIn: pixhex
+% Pmodificado : {pixbit, pixrgb, pixhex}
+%	PixelOut: pixhex
+changeHexPixel(PixelIn, Pmodificado, PixelOut) :-
+    pixhex(X, Y, Hex, Depth, PixelIn),
+    pixhex(X1, Y1, Hex1, Depth1, Pmodificado),
+    (   X is X1,
+        Y is Y1 ->  pixbit(X1, Y1, Hex1, Depth1, PixelOut) ; pixbit(X, Y, Hex, Depth, PixelOut)).
+
+% Dominio:
+%	PixelsIn: List X pixel {pixbit, pixhex, pixrgb}
+% Pmodificado : {pixbit, pixrgb, pixhex}
+%	PixelsOut: List X pixel {pixbit, pixhex, pixrgb}
+changePixels([], _, []) :- !.
+changePixels([PixelIn | PixelsIn], Pmodificado, [PixelOut | PixelsOut]) :-
+    (   changeBitPixel(PixelIn, Pmodificado, PixelOut);
+    changeRGBDPixel(PixelIn, Pmodificado, PixelOut); 
+    changeHexPixel(PixelIn, Pmodificado, PixelOut)), 
+    changePixels(PixelsIn, Pmodificado, PixelsOut).
+
+% Dominio:
+% ImageIn: TDA Image
+% Pmodificado : {pixbit, pixrgb, pixhex}
+%	ImageOut: TDA Image
+imageChangePixel(ImageIn, Pmodificado, ImageOut) :-
+   	image(Width, Height, PixelsIn, ImageIn),
+    changePixels(PixelsIn, Pmodificado, PixelsOut),
+	image(Width, Height, PixelsOut, ImageOut).
+    
+% Dominio:
+% PixelIn: pixrgb
+% PixelOut: pixrgb
+imageInvertColorRGB(PixelIn, PixelOut) :-
+	pixrgb(X, Y, R, G, B, D, PixelIn),
+    NewR is 255 - R,
+    NewG is 255 - G,
+    NewB is 255 - B,
+    pixrgb(X, Y, NewR, NewG, NewB, D, PixelOut). 
+    
+        

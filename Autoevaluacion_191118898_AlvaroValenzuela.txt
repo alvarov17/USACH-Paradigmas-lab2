@@ -24,8 +24,8 @@ imageRGBToHex         | 1
 imageToHistogram      | 0
 imageRotate90         | 0
 imageCompress         | 0
-imageChangePixel      | 0
-imageInvertColorRGB   | 0
+imageChangePixel      | 1 -> Implementado para Comodín
+imageInvertColorRGB   | 1 -> Implementado para Comodín
 imageToString         | 0
 imageDepthLayers      | 0
 imageDecompress       | 0
